@@ -8,4 +8,4 @@ React
 MySQL
 
 ## Live Demo
-[https://personal-finance-tracker12.vercel.app](https://personal-finance-tracker-chi-umber.vercel.app/)
+https://personal-finance-tracker-chi-umber.vercel.app/
