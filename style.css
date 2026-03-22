@@ -52,3 +52,16 @@ li {
   margin-bottom: 10px;
   border-radius: 5px;
 }
+
+body.dark {
+  background: #121212;
+  color: white;
+}
+
+body.dark .container {
+  background: #1e1e1e;
+}
+
+body.dark li {
+  background: #333;
+}
