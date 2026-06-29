@@ -1,16 +1,19 @@
-# Use Java 21
-FROM eclipse-temurin:21-jdk
+# ---------- Build Stage ----------
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
 
 WORKDIR /app
 
-# Copy project files
 COPY . .
 
-# Build the Spring Boot application
 RUN mvn clean package -DskipTests
 
-# Spring Boot listens on 8080
+# ---------- Runtime Stage ----------
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Run the generated JAR
-CMD ["sh", "-c", "java -jar target/*.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
