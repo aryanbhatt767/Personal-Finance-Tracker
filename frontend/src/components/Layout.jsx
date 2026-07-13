@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import styles from './Layout.module.css'
@@ -13,17 +14,29 @@ const navItems = [
 export default function Layout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleLogout = () => {
     logout()
     navigate('/login')
   }
 
+  const handleNavClick = () => setMobileOpen(false)
+
   const initials = user?.name?.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || 'U'
 
   return (
     <div className={styles.app}>
-      <aside className={styles.sidebar}>
+      <button className={styles.menuToggle} onClick={() => setMobileOpen(true)}>
+        <i className="ti ti-menu-2" aria-hidden="true" />
+      </button>
+
+      <div
+        className={`${styles.overlay} ${mobileOpen ? styles.show : ''}`}
+        onClick={() => setMobileOpen(false)}
+      />
+
+      <aside className={`${styles.sidebar} ${mobileOpen ? styles.open : ''}`}>
         <div className={styles.logo}>
           <div className={styles.logoIcon}>💰</div>
           <div>
@@ -39,6 +52,7 @@ export default function Layout() {
               key={item.to}
               to={item.to}
               end={item.end}
+              onClick={handleNavClick}
               className={({ isActive }) =>
                 `${styles.navItem} ${isActive ? styles.active : ''}`
               }
