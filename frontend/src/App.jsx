@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
+import OAuthCallback from './pages/OAuthCallback'
 import Dashboard from './pages/Dashboard'
 import Transactions from './pages/Transactions'
 import Budget from './pages/Budget'
@@ -29,6 +30,7 @@ export default function App() {
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+          <Route path="/oauth-callback" element={<OAuthCallback />} />
           <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Dashboard />} />
             <Route path="transactions" element={<Transactions />} />

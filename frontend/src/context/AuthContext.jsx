@@ -40,6 +40,13 @@ export function AuthProvider({ children }) {
     return userData
   }
 
+  const setTokenFromOAuth = (jwt) => {
+    localStorage.setItem('token', jwt)
+    api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`
+    setLoading(true)
+    setToken(jwt) // triggers the useEffect above, which fetches /users/me
+  }
+
   const logout = () => {
     localStorage.removeItem('token')
     delete api.defaults.headers.common['Authorization']
@@ -48,7 +55,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout, setTokenFromOAuth }}>
       {children}
     </AuthContext.Provider>
   )

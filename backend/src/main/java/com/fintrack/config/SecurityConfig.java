@@ -2,6 +2,7 @@ package com.fintrack.config;
 
 import com.fintrack.security.JwtAuthFilter;
 import com.fintrack.security.CustomUserDetailsService;
+import com.fintrack.security.OAuth2SuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,24 +32,28 @@ public class SecurityConfig {
 
     @Autowired private JwtAuthFilter jwtAuthFilter;
     @Autowired private CustomUserDetailsService customUserDetailsService;
+    @Autowired private OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println(">>> CUSTOM SECURITY CONFIG LOADED <<<");
         http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .oauth2Login(oauth2 -> oauth2
+                .successHandler(oAuth2SuccessHandler)
+            )
             .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
         return http.build();
