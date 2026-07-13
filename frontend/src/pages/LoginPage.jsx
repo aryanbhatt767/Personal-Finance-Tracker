@@ -45,10 +45,9 @@ export default function LoginPage() {
     }
   }
 
-  const handleGoogleLogin = () => {
-    // window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`
-    console.log('Google login not wired up yet')
-  }
+ const handleGoogleLogin = () => {
+  window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`
+}
 
   return (
     <div style={s.page}>
