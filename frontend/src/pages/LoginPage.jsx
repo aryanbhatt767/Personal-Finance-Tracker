@@ -5,13 +5,17 @@ import { useNavigate } from 'react-router-dom'
 export default function LoginPage() {
   const { login, register } = useAuth()
   const navigate = useNavigate()
-  const [tab, setTab] = useState('login')
+  const [mode, setMode] = useState('login') // 'login' | 'register'
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
 
   const [loginForm, setLoginForm] = useState({ email: '', password: '' })
   const [regForm, setRegForm] = useState({ name: '', email: '', password: '' })
+
+  const switchMode = () => {
+    setMode(m => (m === 'login' ? 'register' : 'login'))
+    setError('')
+  }
 
   const handleLogin = async e => {
     e.preventDefault()
@@ -42,7 +46,6 @@ export default function LoginPage() {
   }
 
   const handleGoogleLogin = () => {
-    // Redirect to your backend's OAuth2 authorization endpoint, e.g.:
     // window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`
     console.log('Google login not wired up yet')
   }
@@ -56,12 +59,9 @@ export default function LoginPage() {
           <div style={s.sub}>Your smart money companion</div>
         </div>
 
-        <div style={s.tabs}>
-          <button style={{...s.tab, ...(tab==='login' ? s.tabActive : {})}} onClick={() => { setTab('login'); setError('') }}>Sign in</button>
-          <button style={{...s.tab, ...(tab==='register' ? s.tabActive : {})}} onClick={() => { setTab('register'); setError('') }}>Create account</button>
-        </div>
+        <div style={s.formTitle}>{mode === 'login' ? 'Sign in' : 'Create account'}</div>
 
-        {tab === 'login' ? (
+        {mode === 'login' ? (
           <form onSubmit={handleLogin}>
             <Field label="Email address" type="email" value={loginForm.email}
               onChange={e => setLoginForm(f => ({ ...f, email: e.target.value }))} placeholder="you@email.com" />
@@ -79,10 +79,21 @@ export default function LoginPage() {
             <Field label="Password" type="password" value={regForm.password}
               onChange={e => setRegForm(f => ({ ...f, password: e.target.value }))} placeholder="min 6 characters" />
             {error && <p style={s.err}>⚠ {error}</p>}
-            {success && <p style={s.ok}>✓ {success}</p>}
             <button style={s.btn} type="submit" disabled={loading}>{loading ? 'Creating account…' : 'Create account'}</button>
           </form>
         )}
+
+        <p style={s.switchText}>
+          {mode === 'login' ? (
+            <>Don't have an account?{' '}
+              <span style={s.switchLink} onClick={switchMode}>Register here</span>
+            </>
+          ) : (
+            <>Already have an account?{' '}
+              <span style={s.switchLink} onClick={switchMode}>Sign in</span>
+            </>
+          )}
+        </p>
 
         <div style={s.divider}>
           <div style={s.dividerLine} />
@@ -116,17 +127,16 @@ function Field({ label, ...props }) {
 const s = {
   page: { display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:'var(--bg)', padding: 20 },
   card: { background:'var(--card)', border:'1px solid var(--border)', borderRadius: 20, padding: 32, width: 380, maxWidth: '100%' },
-  logoWrap: { display:'flex', flexDirection:'column', alignItems:'center', marginBottom: 28 },
+  logoWrap: { display:'flex', flexDirection:'column', alignItems:'center', marginBottom: 20 },
   logoIcon: { width:52, height:52, background:'linear-gradient(135deg,#6c63ff,#a78bfa)', borderRadius:14, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, marginBottom:10 },
   title: { fontSize: 22, fontWeight: 700, letterSpacing: '-.5px' },
   sub: { fontSize: 13, color: 'var(--muted)', marginTop: 4 },
-  tabs: { display:'flex', background:'var(--surface)', borderRadius:8, padding:3, marginBottom:24 },
-  tab: { flex:1, padding:'8px', borderRadius:6, border:'none', background:'none', color:'var(--muted)', fontSize:13, cursor:'pointer', fontWeight:500 },
-  tabActive: { background:'var(--card)', color:'var(--text)' },
+  formTitle: { fontSize: 15, fontWeight: 600, color: 'var(--text)', marginBottom: 18 },
   input: { width:'100%', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:8, padding:'10px 12px', color:'var(--text)', fontSize:13, outline:'none' },
   btn: { width:'100%', padding:12, background:'var(--accent)', color:'#fff', border:'none', borderRadius:8, fontSize:14, fontWeight:600, cursor:'pointer', marginTop:4 },
   err: { color:'var(--red)', fontSize:12, marginBottom:10 },
-  ok: { color:'var(--green)', fontSize:12, marginBottom:10 },
+  switchText: { textAlign:'center', fontSize:12.5, color:'var(--muted)', marginTop:16 },
+  switchLink: { color:'var(--accent)', fontWeight:600, cursor:'pointer' },
   divider: { display:'flex', alignItems:'center', gap:10, margin:'20px 0' },
   dividerLine: { flex:1, height:1, background:'var(--border)' },
   dividerText: { fontSize:10, color:'var(--muted)', letterSpacing:.5 },
