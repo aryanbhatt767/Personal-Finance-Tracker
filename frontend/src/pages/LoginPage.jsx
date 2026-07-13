@@ -41,6 +41,12 @@ export default function LoginPage() {
     }
   }
 
+  const handleGoogleLogin = () => {
+    // Redirect to your backend's OAuth2 authorization endpoint, e.g.:
+    // window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`
+    console.log('Google login not wired up yet')
+  }
+
   return (
     <div style={s.page}>
       <div style={s.card}>
@@ -48,7 +54,6 @@ export default function LoginPage() {
           <div style={s.logoIcon}>💰</div>
           <div style={s.title}>FinTrack</div>
           <div style={s.sub}>Your smart money companion</div>
-          <div style={s.jwtBadge}>🔒 JWT + bcrypt secured</div>
         </div>
 
         <div style={s.tabs}>
@@ -64,7 +69,6 @@ export default function LoginPage() {
               onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))} placeholder="••••••••" />
             {error && <p style={s.err}>⚠ {error}</p>}
             <button style={s.btn} type="submit" disabled={loading}>{loading ? 'Signing in…' : 'Sign in'}</button>
-            <p style={s.hint}>Demo: aryan@fintrack.io / aryan123</p>
           </form>
         ) : (
           <form onSubmit={handleRegister}>
@@ -80,10 +84,21 @@ export default function LoginPage() {
           </form>
         )}
 
-        <div style={s.apiNote}>
-          <strong style={{ color: 'var(--text)' }}>POST /api/auth/{tab === 'login' ? 'login' : 'register'}</strong><br />
-          {tab === 'login' ? 'Validates credentials · Issues JWT · Returns user profile' : 'bcrypt hashes password · Stores user · Issues JWT token'}
+        <div style={s.divider}>
+          <div style={s.dividerLine} />
+          <span style={s.dividerText}>OR CONTINUE WITH</span>
+          <div style={s.dividerLine} />
         </div>
+
+        <button style={s.googleBtn} type="button" onClick={handleGoogleLogin}>
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.7-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/>
+            <path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.1-4 1.1-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1C3.4 21.4 7.4 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.4 14.3c-.2-.7-.4-1.4-.4-2.3s.1-1.6.4-2.3V6.6H1.4C.5 8.3 0 10.1 0 12s.5 3.7 1.4 5.4l4-3.1z"/>
+            <path fill="#EA4335" d="M12 4.8c1.7 0 3.3.6 4.5 1.7l3.4-3.4C17.9 1.2 15.2 0 12 0 7.4 0 3.4 2.6 1.4 6.6l4 3.1C6.3 6.9 8.9 4.8 12 4.8z"/>
+          </svg>
+          Sign in with Google
+        </button>
       </div>
     </div>
   )
@@ -105,7 +120,6 @@ const s = {
   logoIcon: { width:52, height:52, background:'linear-gradient(135deg,#6c63ff,#a78bfa)', borderRadius:14, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, marginBottom:10 },
   title: { fontSize: 22, fontWeight: 700, letterSpacing: '-.5px' },
   sub: { fontSize: 13, color: 'var(--muted)', marginTop: 4 },
-  jwtBadge: { marginTop: 8, fontSize: 10, padding: '3px 10px', borderRadius: 20, background: 'rgba(34,197,94,.1)', color: '#22c55e', border: '1px solid rgba(34,197,94,.2)' },
   tabs: { display:'flex', background:'var(--surface)', borderRadius:8, padding:3, marginBottom:24 },
   tab: { flex:1, padding:'8px', borderRadius:6, border:'none', background:'none', color:'var(--muted)', fontSize:13, cursor:'pointer', fontWeight:500 },
   tabActive: { background:'var(--card)', color:'var(--text)' },
@@ -113,6 +127,8 @@ const s = {
   btn: { width:'100%', padding:12, background:'var(--accent)', color:'#fff', border:'none', borderRadius:8, fontSize:14, fontWeight:600, cursor:'pointer', marginTop:4 },
   err: { color:'var(--red)', fontSize:12, marginBottom:10 },
   ok: { color:'var(--green)', fontSize:12, marginBottom:10 },
-  hint: { textAlign:'center', marginTop:12, fontSize:11, color:'var(--sub)' },
-  apiNote: { marginTop:16, padding:'10px 12px', background:'var(--surface)', borderRadius:8, fontSize:11, color:'var(--muted)', lineHeight:1.6 },
+  divider: { display:'flex', alignItems:'center', gap:10, margin:'20px 0' },
+  dividerLine: { flex:1, height:1, background:'var(--border)' },
+  dividerText: { fontSize:10, color:'var(--muted)', letterSpacing:.5 },
+  googleBtn: { width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:11, background:'var(--surface)', border:'1px solid var(--border)', borderRadius:8, color:'var(--text)', fontSize:13, fontWeight:600, cursor:'pointer' },
 }
