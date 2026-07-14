@@ -1,4 +1,4 @@
-.app { display: flex; height: 100vh; overflow: hidden; }
+.app { display: flex; height: 100dvh; overflow: hidden; }
 
 .sidebar {
   width: 220px;
@@ -8,6 +8,7 @@
   flex-direction: column;
   padding: 20px 12px;
   flex-shrink: 0;
+  overflow-y: auto;
 }
 
 .logo {

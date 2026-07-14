@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import styles from './Dashboard.module.css'
 import { Link } from 'react-router-dom'
 import { Line } from 'react-chartjs-2'
 import {
@@ -106,8 +107,8 @@ export default function Dashboard() {
         }
       />
 
-      <div style={s.content}>
-        <div style={s.metricsRow}>
+      <div className={styles.content}>
+        <div className={styles.metricsRow}>
           <MetricCard label="Total Balance" icon="ti-wallet" iconColor="var(--accent2)"
             value={fmt(summary.balance)}
             valueColor={safeNum(summary.balance) >= 0 ? 'var(--green)' : 'var(--red)'}
@@ -123,7 +124,7 @@ export default function Dashboard() {
             delta="This month" deltaUp />
         </div>
 
-        <div style={s.row2}>
+        <div className={styles.row2}>
           <div style={s.chartCard}>
             <div style={s.cardHeader}>
               <div>
@@ -231,9 +232,8 @@ function TxnRow({ txn }) {
 }
 
 const s = {
-  content: { padding: 24 },
-  metricsRow: { display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 24 },
-  row2: { display: 'grid', gridTemplateColumns: '1fr 340px', gap: 14, marginBottom: 24 },
+  
+  
   chartCard: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 },
   catsCard: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 },
   txnCard: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 },

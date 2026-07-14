@@ -27,9 +27,9 @@ export default function Layout() {
 
   return (
     <div className={styles.app}>
-      <button className={styles.menuToggle} onClick={() => setMobileOpen(true)}>
-        <i className="ti ti-menu-2" aria-hidden="true" />
-      </button>
+      <button className={styles.menuToggle} onClick={() => setMobileOpen(o => !o)}>
+  <i className={`ti ${mobileOpen ? 'ti-x' : 'ti-menu-2'}`} aria-hidden="true" />
+</button>
 
       <div
         className={`${styles.overlay} ${mobileOpen ? styles.show : ''}`}
