@@ -21,18 +21,18 @@ export default function Profile() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const handleSaveProfile = async e => {
-    e.preventDefault()
-    setSavingProfile(true)
-    setProfileMsg('')
-    try {
-      await api.put('/users/me', { name, email })
-      setProfileMsg('Profile updated')
-    } catch (err) {
-      setProfileMsg(err.response?.data?.error || 'Failed to update profile')
-    } finally {
-      setSavingProfile(false)
-    }
+  e.preventDefault()
+  setSavingProfile(true)
+  setProfileMsg('')
+  try {
+    await userAPI.updateMe({ name, email })
+    setProfileMsg('Profile updated')
+  } catch (err) {
+    setProfileMsg(err.response?.data?.error || 'Failed to update profile')
+  } finally {
+    setSavingProfile(false)
   }
+}
 
   const handleChangePassword = async e => {
   e.preventDefault()
@@ -43,7 +43,7 @@ export default function Profile() {
   }
   setSavingPwd(true)
   try {
-    await api.put('/users/me', { password: pwd.next })
+    await userAPI.updateMe({ password: pwd.next })
     setPwdMsg('Password changed')
     setPwd({ current: '', next: '', confirm: '' })
   } catch (err) {
@@ -83,13 +83,13 @@ export default function Profile() {
   }
 
   const handleDeleteAccount = async () => {
-    try {
-      await api.delete('/users/me')
-      logout()
-    } catch (err) {
-      console.error('Delete failed:', err)
-    }
+  try {
+    await userAPI.deleteMe()
+    logout()
+  } catch (err) {
+    console.error('Delete failed:', err)
   }
+}
 
   return (
     <div>
